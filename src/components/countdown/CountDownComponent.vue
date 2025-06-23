@@ -10,15 +10,18 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, watch } from 'vue';
-const props = defineProps<{
-    countdownValue: number | null,
-    start: boolean
-}>();
+
+import { useCountdownStore } from '../../stores/useCountdown';
+import { storeToRefs } from 'pinia';
+
+const countStore = useCountdownStore();
+
+
 const emit = defineEmits(['endCountdown']);
 const countdownValueR = ref<number | null>(10);
 const countdownText = ref<string>("Start Countdown");
 onMounted(() => {
-    countdownValueR.value = props.countdownValue ?? 10;
+    countdownValueR.value = countStore.countdown ?? 10;
     let i = setInterval(() => {
         if (countdownValueR.value && countdownValueR.value > 0) {
             countdownText.value = `Countdown: ${countdownValueR.value}`;
@@ -26,7 +29,7 @@ onMounted(() => {
         } else {
             countdownText.value = "Countdown Finished";
             clearInterval(i);
-            emit('endCountdown');
+            countStore.setSiteLink('completed');
         }
     }, 1000);
 })

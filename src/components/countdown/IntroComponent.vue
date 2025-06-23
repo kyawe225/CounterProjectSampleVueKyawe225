@@ -23,16 +23,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref , defineEmits } from 'vue';
+import { ref } from 'vue';
+import { useCountdownStore } from '../../stores/useCountdown';
+
+const countStore = useCountdownStore();
 const countdownValue = ref<number | null>(null);
 const countdownErrorString = ref('');
 
-const events = defineEmits(['startCount']);
-
-
 
 const valid=()=>{
-    if(countdownValue.value == null || countdownValue.value == 0){
+    if(countdownValue.value == null || countdownValue.value == 0 || countdownValue.value < 0){
         countdownErrorString.value = "Please enter a valid number";
         return false;
     }
@@ -43,7 +43,8 @@ const startCountdown = () => {
     if(!valid()){
         return ;
     }
-    events('startCount', countdownValue.value);
+    countStore.setCountdown(countdownValue.value || 0);
+    countStore.setSiteLink('countdown');
     // let i = setInterval(()=>{
     //     if(Cvalue && Cvalue > 0){
     //         Cvalue--;

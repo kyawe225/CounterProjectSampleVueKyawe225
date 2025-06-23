@@ -5,7 +5,7 @@
                 <h1 class="text-center py-2 my-2">
                     Countdown Finished!
                 </h1>
-                <button class="btn btn-primary" @click.once="emit('completeCountdown')">
+                <button class="btn btn-primary" @click.once="complete">
                     Go to Home Screen
                 </button>
             </div>
@@ -14,7 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits } from 'vue';
-var emit = defineEmits(['completeCountdown']);
+import { useCountdownStore } from '../../stores/useCountdown';
+
+let countStore = useCountdownStore();
+
+const complete = ()=>{
+    countStore.resetCountdown();
+    countStore.setSiteLink('intro');  
+}
 
 </script>
